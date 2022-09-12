@@ -26,7 +26,38 @@ def productList(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-def productDetail(request, pk):
-    products = Product.objects.get(id=pk)
+def productDetail(request, id):
+    products = Product.objects.get(pk=id)
     serializer = ProductSerializer(products, many=True)
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+def productCreate(request):
+    serializer = ProductSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save
+    return Response(serializer.data)
+
+
+@api_view(['PUT'])
+def productUpdate(request, id):
+    try:
+        product = Product.objects.get(pk=id)
+    except Product.DoesNotExist:
+        return Response( status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'PUT':
+        serializer = ProductSerializer(instance=product, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+@api_view(['DELETE'])
+def productDelete(request, id):
+    try:
+        product = Product.objects.get(pk=id)
+    except Product.DoesNotExist:
+        return Response( status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'DELETE':
+        product.delete()
+    return Response('Product deleted successfully')
