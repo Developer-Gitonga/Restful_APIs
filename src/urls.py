@@ -8,4 +8,9 @@ urlpatterns = [
     path('product-create/', views.productCreate, name="product-create"),
     path('product-delete/<int:id>/', views.productDelete, name="product-delete"),
     path('product-update/<int:id>/', views.productUpdate, name="product-update"),
+    path('order-list/', views.orderList, name="order-list"),
+    path('order-detail/<int:id>/', views.orderDetail, name="order-detail"),
+    path('order-create/', views.orderCreate, name="order-create"),
+    path('order-delete/<int:id>/', views.orderDelete, name="order-delete"),
+    path('order-update/<int:id>/', views.orderUpdate, name="order-update"),
 ]
