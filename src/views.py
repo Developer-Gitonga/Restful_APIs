@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import ProductSerializer
 from .models import Product
-
+from rest_framework import status
 # Create your views here.
 
 @api_view(['GET'])
@@ -27,8 +27,8 @@ def productList(request):
 
 @api_view(['GET'])
 def productDetail(request, id):
-    products = Product.objects.get(pk=id)
-    serializer = ProductSerializer(products, many=True)
+    product = Product.objects.get(pk=id)
+    serializer = ProductSerializer(product)
     return Response(serializer.data)
 
 
@@ -36,8 +36,10 @@ def productDetail(request, id):
 def productCreate(request):
     serializer = ProductSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save
-    return Response(serializer.data)
+        serializer.save()        
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['PUT'])
@@ -45,7 +47,7 @@ def productUpdate(request, id):
     try:
         product = Product.objects.get(pk=id)
     except Product.DoesNotExist:
-        return Response( status=status.HTTP_404_NOT_FOUND)
+        return Response(status=status.HTTP_404_NOT_FOUND)
     if request.method == 'PUT':
         serializer = ProductSerializer(instance=product, data=request.data)
         if serializer.is_valid():
@@ -57,7 +59,7 @@ def productDelete(request, id):
     try:
         product = Product.objects.get(pk=id)
     except Product.DoesNotExist:
-        return Response( status=status.HTTP_404_NOT_FOUND)
+        return Response(status=status.HTTP_404_NOT_FOUND)
     if request.method == 'DELETE':
         product.delete()
     return Response('Product deleted successfully')

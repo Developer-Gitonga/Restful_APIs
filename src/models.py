@@ -18,11 +18,11 @@ class Tag(models.Model):
         return self.name
 
 class Product(models.Model):
-    CATEGORY = (
-        ('Indoor','Indoor'),
-        ('Outdoor','Outdoor'),
+    # CATEGORY = (
+    #     ('Indoor','Indoor'),
+    #     ('Outdoor','Outdoor'),
 
-    )
+    # )
 
     name = models.CharField(max_length=200, null=True)
     price = models.FloatField(null = True)
